@@ -1,8 +1,8 @@
 #variables
 variables:
-  GITLAB_REPO: "https://gitlab.com/Andr1500/CICD_flask_app_with_BlueGreen.git"
+  GITLAB_REPO: "https://gitlab.com/Andr1500/cicd_bluegreen_codepipeline_ecs.git"
   CODECOMMIT_REPO: "ssh://git-codecommit.eu-central-1.amazonaws.com/v1/repos/from_gitlab"
-  REPO_DIR: CICD_flask_app_with_BlueGreen
+  REPO_DIR: cicd_bluegreen_codepipeline_ecs
   BRANCH: deploy_to_codecommit
 
 #Clone repo from Gitlab to Codecommit
