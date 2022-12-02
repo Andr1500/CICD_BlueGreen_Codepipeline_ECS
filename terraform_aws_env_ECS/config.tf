@@ -1094,11 +1094,11 @@ resource "aws_iam_instance_profile" "ecs-instance-profile" {
 resource "aws_sns_topic" "sns_topic" {
   name = "Codepipeline_SNS_topic"
 }
-#Creation of SNS subscription
+#Creation of email SNS subscription
 resource "aws_sns_topic_subscription" "email_subscription" {
   topic_arn = aws_sns_topic.sns_topic.arn
   protocol  = "email"
-  endpoint  = "a1500@tutanota.com"
+  endpoint  = var.sns_endpoint
 }
 
 #policy for SNS topic
@@ -1120,7 +1120,7 @@ resource "aws_sns_topic_policy" "default" {
   policy = data.aws_iam_policy_document.notif_access.json
 }
 
-#Notification rule for Codedebuild
+#Notification rule for Codebuild
 resource "aws_codestarnotifications_notification_rule" "codedeploy" {
   detail_type    = "BASIC"
   event_type_ids = ["codebuild-project-build-phase-failure", "codebuild-project-build-phase-success"]

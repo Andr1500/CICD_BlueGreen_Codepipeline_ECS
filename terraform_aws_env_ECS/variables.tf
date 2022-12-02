@@ -47,3 +47,7 @@ variable "route53_hosted_zone_name" {
 variable "route53_subdomain_name" {
   default = "flaskapp"
 }
+
+variable "sns_endpoint" {
+  default = "myemail.com"
+}
