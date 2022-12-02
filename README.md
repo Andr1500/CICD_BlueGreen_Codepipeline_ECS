@@ -23,7 +23,7 @@ Typical uses would be deployment to Kubernetes, demos of Docker, CI/CD (build pi
 Clone the project to any directory where you do development work
 
 ```
-git clone https://gitlab.com/Andr1500/gitlab-cicd.git
+git clone https://gitlab.com/Andr1500/cicd_bluegreen_codepipeline_ecs.git
 ```
 
 ### Makefile
@@ -47,7 +47,7 @@ clean                🧹 Clean up project
 
 The app runs under Flask and listens on port 5000 by default, this can be changed with the `PORT` environmental variable.
 
-# Creation of Elastic Container Registry and EC2 instance with Terraform
+# Creation of AWS infrastructure (ECR, CodeCommit, CodeBuild, CodeDeploy, CodePipeline, SNS topic, S3 bucket, ECS) with Terraform
 
 Go to terraform_aws_env_ECS/ and build AWS environment:
 
@@ -58,28 +58,31 @@ export AWS_ACCESS_KEY_ID="ACCES_KEY"
 ```
 run ```terraform init```
 if everything is ok, run ```terraform plan``` and ```terraform apply```
-when infrastructure wil not be necessary, run ```terraform destroy```
+when infrastructure will not be necessary, run ```terraform destroy```
 
-# Gitlab CI/CD pipeline
+# Gitlab pipeline
 
-A working set of CI and CD release Gitlab workflows are provided in .gitlab-ci.yml, automated builds running on Gitlab hosted runners
+A working set of CI release Gitlab workflows are provided in .gitlab-ci.yml.
 
 Gitlab pipeline stages:
 
 - **test** Making test of the app
-- **build** Build docker image and push it to private repo.
-- **deploy** Deploy app on EC2 instance, first build deploy docker on 80 port as "blue deployment", next build deploy container on 5000 port as "green deployment". "python-app1" is container name for "blue deployment", "python-app2" is container name for "green deployment".
-- **blue_green** Manual stage, after verifying that everything is ok with "green deployment" we run this stage and "green deployment" becomes "blue deployment". We stop and delete the container "python-app1" and recreate it based on "green deployment" image. Next we stop and delete "green deployment" container. Next we delete all unused images.
+- **deploy** Clone existing repo to AWS Codecommit repo.
 
-![Gitlab CI/CD pipeline](images/gitlab_pipeline.png)
+# Gitlab Variables
 
-# Gitlab CI/CD Variables
+Add variables into Gitlab repo Settings -> CI/CD -> Variables
 
-Create AWS IAM user for access to ECR, assign to the user AmazonEC2ContainerRegistryPowerUser policy, copy
-access keys and add the keys to Gitlab CI/CD variables.
+![Gitlab Variables](images/gitlab_variables.png)
 
-Add this variables into Settings -> CI/CD -> Variables
+# AWS pipeline
 
-![Gitlab CI/CD Variables](images/gitlab_cicd_variables.png)
+Main part of CI/CD pipeline is done by AWS Codepipeline with stages:
+Source - CodeCommit,
+Build  - CodeBuild,
+Deploy - CodeDeploy.
+Application deploy on Elastic Container Service. SNS topic is configured for receiving emails about success or fail stages of CodeBuid and CodeDeploy. S3 bucket is necessary for storing source and buid artifacts which are necesary for CodePipeline execution.
 
-### [Gitlab CI/CD pipeline](https://gitlab.com/Andr1500/gitlab-cicd/-/pipelines)
+![AWS pipeline](images/aws_pipeline.png)
+
+### [Gitlab pipeline](https://gitlab.com/Andr1500/cicd_bluegreen_codepipeline_ecs/-/pipelines)
