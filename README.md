@@ -49,7 +49,7 @@ The app runs under Flask and listens on port 5000 by default, this can be change
 
 # Creation of Elastic Container Registry and EC2 instance with Terraform
 
-Go to /terraform_aws_environment_creation and build AWS environment:
+Go to terraform_aws_env_ECS/ and build AWS environment:
 
 set AWS credentials, credentials can be exported as environment variables:
 ```
