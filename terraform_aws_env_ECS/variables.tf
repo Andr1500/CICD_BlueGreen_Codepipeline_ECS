@@ -8,7 +8,7 @@ variable "ecs_key_pair_name" {
 }
 
 variable "aws_account_id" {
-  default = "138161713046"
+  default = "123456789"
 }
 
 variable "service_name" {
@@ -41,7 +41,7 @@ variable "instance_type" {
 }
 
 variable "route53_hosted_zone_name" {
-  default = "an1500.click"
+  default = "xxxxx.com"
 }
 
 variable "route53_subdomain_name" {
